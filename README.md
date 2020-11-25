@@ -1,14 +1,25 @@
-# jn-quarkus-base project
+# Proyecto: jn-quarkus-base
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Este es el arquetipo base de Quarkus 1.7 para el desarrollo de aplicaciónes.
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+Para mayor Referencia visitar los sitios: 
 
-## Running the application in dev mode
+https://access.redhat.com/documentation/en-us/red_hat_build_of_quarkus/1.7/
+https://quarkus.io/
 
-You can run your application in dev mode that enables live coding using:
+## Comandos de quarkus para que sean usados por este arquetipo
+
+### Ejecución local de la aplicación (en tu maquina)
+
+Puedes ejecutar la aplicación localmente con el siguiente comando, ademas no es necesario
+que vuelvas a compilar para tomar los cambios que hagas:
 ```
 ./mvnw quarkus:dev
+```
+
+La forma más facil de probar la aplicación directamente es usando curl:
+```
+curl -X GET http://localhost:8080/hello
 ```
 
 ## Packaging and running the application
@@ -28,3 +39,9 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/jn-quarkus-base-1.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+
+## Para desplegar la aplicación en Openshift
+
+```
+./mvnw clean package -Dquarkus.kubernetes.deploy=true
+```
