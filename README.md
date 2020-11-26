@@ -1,50 +1,103 @@
 # Proyecto: jn-quarkus-base
 
-Este es el arquetipo base de Quarkus 1.7 para el desarrollo de aplicaciónes.
+Este es el arquetipo base de Quarkus 1.7 para el desarrollo de microservicios.
 
 Para mayor Referencia visitar los sitios: 
 
-https://access.redhat.com/documentation/en-us/red_hat_build_of_quarkus/1.7/
-https://quarkus.io/
+* [Product Documentation for Red Hat build of Quarkus 1.7](https://access.redhat.com/documentation/en-us/red_hat_build_of_quarkus/1.7/)
+* [Quarkus Site](https://quarkus.io/)
 
-## Comandos de quarkus para que sean usados por este arquetipo
+
+## Requerimientos
+
+Para usar este arquetipo, es suficiente tener instalado en tu maquina:
+
+* JDK 11
+* [Maven 3.6.3](https://maven.apache.org/index.html)
+* Openshift Client (oc)
+
+Así mismo, necesitas configurar tu Maven de acuerdo a la guía de Red Hat: [Getting started with Red Hat build of Quarkus](https://access.redhat.com/documentation/en-us/red_hat_build_of_quarkus/1.7/html/getting_started_with_red_hat_build_of_quarkus/index) en el capitulo 2.1.
+
+Si quieres hacer un uso avanzado de Quarkus y compilar de manera nativa. Necesitas usar [GraalVM](https://www.graalvm.org) de la versión 11 para tu sistema operativo, así como, sus componentes adicionales: [Native Image](https://www.graalvm.org/reference-manual/native-image/), [LLVM toolchain](https://www.graalvm.org/reference-manual/llvm/Compiling/#llvm-toolchain-for-compiling-cc) y [Wasm](https://www.graalvm.org/reference-manual/wasm/).
+
+Si deseas crear las imagenes nativas desde un contenedor tendrás que tener instalado [Docker](https://www.docker.com) y revisar las guías correspondientes de Quarkus y Red Hat.
+
+
+## Comandos de quarkus para desarrollar
 
 ### Ejecución local de la aplicación (en tu maquina)
 
-Puedes ejecutar la aplicación localmente con el siguiente comando, ademas no es necesario
-que vuelvas a compilar para tomar los cambios que hagas:
+Puedes ejecutar la aplicación localmente con el siguiente comando, ademas no es necesario que vuelvas a compilar para tomar los cambios que hagas:
 ```
-./mvnw quarkus:dev
+./mvnw clean quarkus:dev
 ```
 
 La forma más facil de probar la aplicación directamente es usando curl:
 ```
-curl -X GET http://localhost:8080/hello
+curl -X GET http://localhost:8080/v1/hello-controller/hello
 ```
 
-## Packaging and running the application
+### Para desplegar la aplicación en Openshift
 
-The application can be packaged using `./mvnw package`.
-It produces the `jn-quarkus-base-1.0-SNAPSHOT-runner.jar` file in the `/target` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/lib` directory.
+Para realizar tus despliegues en OpenShift, es necesario que con la utilería oc hayas hecho lo siguiente previamente:
 
-The application is now runnable using `java -jar target/jn-quarkus-base-1.0-SNAPSHOT-runner.jar`.
+```
+$ oc login https://algun.servidor.openshift.com
+$ oc project my-project
+```
+Con los dos comandos anteriores estarás seguro de que has hecho login y te encuentras en el projecto donde quieras hacer tu despliegue ([Aqui esta la guía de oc](https://docs.openshift.com/container-platform/3.11/cli_reference/get_started_cli.html)).
 
-## Creating a native executable
-
-You can create a native executable using: `./mvnw package -Pnative`.
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: `./mvnw package -Pnative -Dquarkus.native.container-build=true`.
-
-You can then execute your native executable with: `./target/jn-quarkus-base-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
-
-## Para desplegar la aplicación en Openshift
-
+Finalmente para hacer el despliegue basta con el siguiente comando para que puedas ver tu contenedor dentro de OpenShift:
 ```
 ./mvnw clean package -Dquarkus.kubernetes.deploy=true
 ```
+
+
+### Empaquetar y correr la aplicación
+
+La aplicación puede ser empaquetada usando `./mvnw package`. que crea el archivo `jn-quarkus-base-1.0-SNAPSHOT-runner.jar` en el directorio `/target`.
+Contempla que no es un _über-jar_ y que las dependencias se encuentran en el directorio `target/lib`..
+
+La aplicación puede correr directamente con el siguiente comando: 
+```
+java -jar target/jn-quarkus-base-1.0-SNAPSHOT-runner.jar
+```
+
+
+### Creación de un ejecutable nativo
+
+Para crear un paquete nativo, es necesario tener instalado GraalVM, así como la variable de ambiente debe de apuntar al directorio de base, ejemplo:
+```
+export GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.3.0/Contents/Home
+```
+
+Se usa el siguiente comando: `./mvnw package -Pnative` para crear el binario.
+
+Si no cuentas con GraalVM, se puede correr una contrucción nativa dentro de un contenedor, para lo cual debes de correr el siguiente comando:
+
+```
+./mvnw package -Pnative -Dquarkus.native.container-build=true
+```
+
+Puedes ejecutar tu aplicación nativa con: `./target/jn-quarkus-base-1.0-SNAPSHOT-runner`
+
+Para mayor referencia: https://quarkus.io/guides/building-native-image.
+
+# Arquetipo
+
+A continuación se explica la estructura del arquetipo y sus reglas generales de uso.
+
+## Características instaladas
+
+* cdi. Contextos e inyección de código
+* resteasy. Paquete base para REST.
+* resteasy-jsonb. Paquete base para JSon (hay varias opciones, pero para paquetes chicos esta es la mejor).
+* hibernate-validator. Validaciones para pojos e interfaces rest.
+* kubernetes. Manejo de ambientación de contenedores en OpenShift.
+* smallrye-health. Para configurar las pruebas de contenedores.
+* smallrye-openapi. Para decorar y documentar los swagger generados.
+* swagger-ui. Utilería en tiempo de desarrollo para invocar desde el browser los servicios que se estan desarrollando.
+
 
 ## Estructura de paquetes
 
