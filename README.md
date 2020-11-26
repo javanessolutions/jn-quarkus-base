@@ -45,3 +45,37 @@ If you want to learn more about building native executables, please consult http
 ```
 ./mvnw clean package -Dquarkus.kubernetes.deploy=true
 ```
+
+## Estructura de paquetes
+
+La estructura de paquetes es como sigue:
+```
+com.javanes.micro.<archetipe.name> -> Paquete Base.
+  |- enums -> Paquete destinado a los enums.
+  |- exception -> Paquete destinado a las excepciones.
+  |- utils -> Paquete destinado a las Utilerias.
+  |- config -> Paquete destinado a las configuraciones generales.
+  |- rest -> Paquete de de la capa rest.
+     |- advice -> Paquete de componentes advice o interceptors.
+     |- controller -> Paquete de las interfaces de los controladores.
+        |- impl -> Paquete de de implementacion de los controladores.
+     |- pojo -> Paquete VO (Value Objects, POJOs) que se usan dentro de la capa rest.
+  |- service -> Paquete de las interfaces de los servicios destinados a las reglas de negocio.
+     |- impl -> Paquete de implementacion de los servicios de negocio
+  |- persistence -> Paquete de la capa de persistencia.
+     |- pojo -> Paquete destinado a los Entity (POJOs) de la capa de persistencia.
+     |- dao -> Paquete de componentes interface DAO (Data Access Object)
+        |- impl -> Paquete de implementacion de DAO
+```
+
+La estructura final del paquete base es la siguiente:
+
+Si en el pom.xml existe 
+```
+  <artifactId>lmg-ent-customer-manager</artifactId>
+```
+
+Entonces el paquete base será:
+```
+com.javanes.micro.customer.manager
+```

@@ -1,7 +1,6 @@
-package com.javanes.bcpl.sso.clientes.pojo;
+package com.javanes.micro.quarkus.base.rest.pojo;
 
 public class HelloResponse {
-    
     private String response;
 
     public String getResponse() {
