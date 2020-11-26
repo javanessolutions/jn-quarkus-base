@@ -15,7 +15,6 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
-@Path("/v1/hello-controller")
 public interface HelloController {
 
     @GET

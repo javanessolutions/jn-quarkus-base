@@ -51,7 +51,10 @@ Finalmente para hacer el despliegue basta con el siguiente comando para que pued
 ```
 ./mvnw clean package -Dquarkus.kubernetes.deploy=true
 ```
-
+Si deseas que se cree una ruta de manera automática para acceder al servicio entonces deberás usar el mismo comando agregando `-Dquarkus.openshift.expose=true`:
+```
+./mvnw clean package -Dquarkus.kubernetes.deploy=true -Dquarkus.openshift.expose=true
+```
 
 ### Empaquetar y correr la aplicación
 
@@ -104,9 +107,10 @@ A continuación se explica la estructura del arquetipo y sus reglas generales de
 La estructura de paquetes es como sigue:
 ```
 com.javanes.micro.<archetipe.name> -> Paquete Base.
+  |- constants -> Paquete destinado a constantes.
   |- enums -> Paquete destinado a los enums.
   |- exception -> Paquete destinado a las excepciones.
-  |- utils -> Paquete destinado a las Utilerias.
+  |- util -> Paquete destinado a las Utilerias.
   |- config -> Paquete destinado a las configuraciones generales.
   |- rest -> Paquete de de la capa rest.
      |- advice -> Paquete de componentes advice o interceptors.

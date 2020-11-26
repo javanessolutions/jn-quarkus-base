@@ -2,6 +2,7 @@ package com.javanes.micro.quarkus.base.rest.controller.impl;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import com.javanes.micro.quarkus.base.config.AppConfiguration;
@@ -14,12 +15,13 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class HelloContollerImpl implements HelloController {
+@Path("/v2/hello-controller")
+public class HelloContollerImplV2 implements HelloController {
 
     /**
      * Logger de la clase, en todos los casos se usará el de Jboss.
      */
-    private static final Logger LOG = LoggerFactory.getLogger(HelloContollerImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HelloContollerImplV2.class);
 
     /**
      * Servicio de negocio
