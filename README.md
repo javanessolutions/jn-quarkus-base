@@ -105,14 +105,14 @@ A continuación se explica la estructura del arquetipo y sus reglas generales de
 
 ## Características instaladas
 
-* cdi. Contextos e inyección de código
-* resteasy. Paquete base para REST.
-* resteasy-jsonb. Paquete base para JSon (hay varias opciones, pero para paquetes chicos esta es la mejor).
-* hibernate-validator. Validaciones para pojos e interfaces rest.
-* kubernetes. Manejo de ambientación de contenedores en OpenShift.
-* smallrye-health. Para configurar las pruebas de contenedores.
-* smallrye-openapi. Para decorar y documentar los swagger generados.
-* swagger-ui. Utilería en tiempo de desarrollo para invocar desde el browser los servicios que se estan desarrollando.
+* **cdi**. Contextos e inyección de código
+* **resteasy**. Paquete base para REST.
+* **resteasy-jsonb**. Paquete base para JSon (hay varias opciones, pero para paquetes chicos esta es la mejor).
+* **hibernate-validator**. Validaciones para pojos e interfaces rest.
+* **kubernetes**. Manejo de ambientación de contenedores en OpenShift.
+* **smallrye-health**. Para configurar las pruebas de contenedores.
+* **smallrye-openapi**. Para decorar y documentar los swagger generados.
+* **swagger-ui**. Utilería en tiempo de desarrollo para invocar desde el browser los servicios que se estan desarrollando.
 
 
 ## Estructura de paquetes
