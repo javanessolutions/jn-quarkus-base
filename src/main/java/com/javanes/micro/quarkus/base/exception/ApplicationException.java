@@ -1,8 +1,10 @@
 package com.javanes.micro.quarkus.base.exception;
 
+import com.javanes.micro.quarkus.base.enums.AppExceptionEnum;
+
 public class ApplicationException extends Exception{
     
-    private int code;
+    private AppExceptionEnum code;
     
     /**
      *
@@ -10,31 +12,27 @@ public class ApplicationException extends Exception{
     private static final long serialVersionUID = 1L;
 
     public ApplicationException() {
-        super("Algo salio mal.");
-        code = 1;
+        super(AppExceptionEnum.STATUS_GENERIC_ERROR.getMessage());
+        code = AppExceptionEnum.STATUS_GENERIC_ERROR;
     }
 
-    public ApplicationException(int code, String message) {
+    public ApplicationException(AppExceptionEnum code, String message) {
         super(message);
         this.code = code;
     }
 
     public ApplicationException(int code, String message, Throwable cause) {
         super(message, cause);
-        this.code = code;
+        code = AppExceptionEnum.STATUS_GENERIC_ERROR.getCode();
     }
 
     public ApplicationException(Throwable cause) {
         super(cause);
-        code = 1;
+        code = AppExceptionEnum.STATUS_GENERIC_ERROR;
     }
 
-    public int getCode() {
+    public AppExceptionEnum getCode() {
         return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
     }
 
 }

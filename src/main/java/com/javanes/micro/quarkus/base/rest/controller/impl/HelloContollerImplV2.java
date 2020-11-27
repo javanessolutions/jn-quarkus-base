@@ -6,9 +6,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import com.javanes.micro.quarkus.base.config.AppConfiguration;
+import com.javanes.micro.quarkus.base.exception.ApplicationException;
 import com.javanes.micro.quarkus.base.rest.controller.HelloController;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
-import com.javanes.micro.quarkus.base.service.HelloService;
+import com.javanes.micro.quarkus.base.rest.pojo.HelloResponse;
 
 import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -23,16 +24,10 @@ public class HelloContollerImplV2 implements HelloController {
      */
     private static final Logger LOG = LoggerFactory.getLogger(HelloContollerImplV2.class);
 
-    /**
-     * Servicio de negocio
-     */
-    @Inject
-    HelloService helloService;
-
     @Inject
     AppConfiguration AppConfiguration;
 
-    public Response sayHello(@NotEmpty @HeaderParam String exchangeId){
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws ApplicationException{
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven
@@ -42,10 +37,12 @@ public class HelloContollerImplV2 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        return Response.ok().entity(helloService.sayHello(AppConfiguration.getDefaultName())).build();
+        HelloResponse response = new HelloResponse();
+        response.setResponse("Hello World V2");
+        return Response.ok().entity(response).build();
     }
 
-    public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name){
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name) throws ApplicationException{
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven
@@ -55,10 +52,12 @@ public class HelloContollerImplV2 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        return Response.ok().entity(helloService.sayHello(name)).build();
+        HelloResponse response = new HelloResponse();
+        response.setResponse(String.format("Hello %s V2",name));
+        return Response.ok().entity(response).build();
     }
 
-    public Response saveHello(@NotEmpty String exchangeId, HelloRequest body) {
+    public Response saveHello(@NotEmpty String exchangeId, HelloRequest body) throws ApplicationException{
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven
@@ -68,8 +67,7 @@ public class HelloContollerImplV2 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        helloService.saveHello(body);
-        return Response.accepted().build();
+        throw new ApplicationException();
     }
 
 }

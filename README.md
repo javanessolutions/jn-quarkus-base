@@ -86,6 +86,19 @@ Puedes ejecutar tu aplicación nativa con: `./target/jn-quarkus-base-1.0-SNAPSHO
 
 Para mayor referencia: https://quarkus.io/guides/building-native-image.
 
+### Creación de un contenedor nativo
+
+Para la cración de un contenedor nativo es importante que la versión de la imagen base corresponda, en este caso estamos usando la versión `20.1.0-java11` de ubi-quarkus-native-s2i.
+
+Para crear el contenedor deberás ejecutar el comando siguiente:
+```
+oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:20.1.0-java11~https://github.com/javanessolutions/jn-quarkus-base.git --name=jn-quarkus-base-native
+```
+Si por algun motivo ves *OOMKilled* en tu contenedor donde se hizo la costrucción de tu contenedor. Tendras que aumentar en el yaml el tamaño de la memoria asignada en el *BuildConfig*, con 4Gb deberá de ser suficiente siendo 8 el ideal.
+
+El proceso de compilación con 500 milicores tardará aproximadamente 18 minutos.
+
+
 # Arquetipo
 
 A continuación se explica la estructura del arquetipo y sus reglas generales de uso.
@@ -136,3 +149,77 @@ Entonces el paquete base será:
 ```
 com.javanes.micro.customer.manager
 ```
+
+## Manejo de excepciones
+
+Para el arquetipo fue creada una clase general en 'com.javanes.micro.quarkus.base.exception' llamada `ApplicationException` la cual como podrás ver en el en esta clase base se maneja como estandar en todas las interfaces de las 3 capas:
+
+* Controller
+* Service
+* Persistence
+
+La razón es que esta clase permite tener un control de errores adecuado para la aplicación que se encadena a través de las 3 capas pudiendo ser certero en el manejo de todos los errores conocidos por la aplicación, para ello se ha creado ademas una enumeración en el paquete `com.javanes.micro.quarkus.base.enums` que te permitirá crear un diccionario de errores HTTP, códigos de retorno y mensajes para la aplicación cliente.
+
+Para lo anterior se han creado dos advisors en el paquete `com.javanes.micro.quarkus.base.rest.advice`
+
+* `ApplicationExceptionHandler` para el manejo de errores aplicativos.
+* `GeneralExceptionHancler` para cualquier error desconocido de la aplicación.
+
+## Configuración de la aplicación
+
+Para realizar la configuración de la aplicación el paquete `com.javanes.micro.quarkus.base.config` puede ser usado simplemente creando una clase y anotandola con `@ConfigProperties`, para esto ya se ha creado una clase llamada `AppConfiguration` la cual únicamente requiere definir los campos dentro del archivo `application.properties`
+
+Todas las propiedades dentro de este archivo que se encuentren con el prefijo `app-config` serán leidas automáticamente por esta clase, la cual puede ser inyectada en cualquier componente de la aplicación.
+
+
+
+## Como crear un nuevo controlador
+
+Los controladores de la capa REST tienen como única intención recibir la llamada de los clientes y delegar inmediatamente a la capa de servicio la llamada.
+
+Por la razón anterior casi no tienen código mas que aquel necesario para delegar la llamada y proveer la respuesta final a través de la clase `Response` de RS para indicar el estatus.
+
+La creación de controladores REST se hace con los siguientes pasos:
+
+1. Crear la interfaz del servicio REST en el paquete `com.javanes.micro.quarkus.base.rest.controller`, esta interfaz solamente tendrá el decorado rest del servicio y puedes extenderla con `openapi`.
+
+```
+public interface HelloController {
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/hello")
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws ApplicationException;
+}
+```
+
+2. Crear la implementación del servicio rest en el paquete `com.javanes.micro.quarkus.base.rest.controller.impl`, hay que notar que en la implementación se identifica el base path del servicio. La ventaja de esto es que la implementación de los controladores la puedes versionar en el path `v1`, `v2`, etc.
+
+```
+@Path("/v2/hello-controller")
+public class HelloContollerImplV2 implements HelloController {
+
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws ApplicationException{
+        LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
+        HelloResponse response = new HelloResponse();
+        response.setResponse("Hello World V1");
+        return Response.ok().entity(response).build();
+    }
+}
+```
+
+## Como crear un nuevo servicio
+
+La creación de servicios que pueden ser inyectados para proveer lógica aplicativa es muy sencilla y consta de los siguientes pasos:
+
+1. Crear la interfaz del servicio en el paquete `com.javanes.micro.quarkus.base.service`, esta interfaz solamente tendrá la definición del servicio y puede ser muy similar a la interfaz controller.
+2. Crear la implementación del servicio en el paquete `com.javanes.micro.quarkus.base.service.impl`.
+3. Anotar la clase con `@ApplicationScoped` para que pueda ser inyectada en cualquier componente.
+
+## Como crear un nuevo servicio de persistencia
+
+La creación de servicios que pueden ser inyectados para proveer lógica aplicativa es muy sencilla y consta de los siguientes pasos:
+
+1. Crear la interfaz del servicio en el paquete `com.javanes.micro.quarkus.base.persistence`, esta interfaz solamente tendrá la definición del servicio y puede ser muy similar a la interfaz controller.
+2. Crear la implementación del servicio en el paquete `com.javanes.micro.quarkus.base.persistence.impl`.
+3. Anotar la clase con `@ApplicationScoped` para que pueda ser inyectada en cualquier componente.

@@ -1,8 +1,10 @@
 package com.javanes.micro.quarkus.base.config;
 
+import com.javanes.micro.quarkus.base.constants.AppConstants;
+
 import io.quarkus.arc.config.ConfigProperties;
 
-@ConfigProperties(prefix = "app-config")
+@ConfigProperties(prefix = AppConstants.APP_CONFIG_PREFIX)
 public class AppConfiguration {
     
     private String greeting = "Hello";

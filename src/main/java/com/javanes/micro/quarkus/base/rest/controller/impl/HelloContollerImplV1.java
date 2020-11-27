@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import com.javanes.micro.quarkus.base.config.AppConfiguration;
+import com.javanes.micro.quarkus.base.exception.ApplicationException;
 import com.javanes.micro.quarkus.base.rest.controller.HelloController;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
 import com.javanes.micro.quarkus.base.service.HelloService;
@@ -32,7 +33,7 @@ public class HelloContollerImplV1 implements HelloController {
     @Inject
     AppConfiguration AppConfiguration;
 
-    public Response sayHello(@NotEmpty @HeaderParam String exchangeId){
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws ApplicationException{
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven
@@ -45,7 +46,7 @@ public class HelloContollerImplV1 implements HelloController {
         return Response.ok().entity(helloService.sayHello(AppConfiguration.getDefaultName())).build();
     }
 
-    public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name){
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name) throws ApplicationException{
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven
@@ -58,7 +59,7 @@ public class HelloContollerImplV1 implements HelloController {
         return Response.ok().entity(helloService.sayHello(name)).build();
     }
 
-    public Response saveHello(@NotEmpty String exchangeId, HelloRequest body) {
+    public Response saveHello(@NotEmpty String exchangeId, HelloRequest body) throws ApplicationException{
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven

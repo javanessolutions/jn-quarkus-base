@@ -4,6 +4,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.javanes.micro.quarkus.base.config.AppConfiguration;
+import com.javanes.micro.quarkus.base.exception.ApplicationException;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloResponse;
 import com.javanes.micro.quarkus.base.service.HelloService;
@@ -20,7 +21,7 @@ public class HelloServiceImpl implements HelloService {
     @Inject
     AppConfiguration appConfiguration;
 
-    public HelloResponse sayHello(final String name) {
+    public HelloResponse sayHello(final String name) throws ApplicationException{
         HelloResponse response = new HelloResponse();
         LOG.debug(String.format("CALL[sayHello]: %s", name));
         response.setResponse(
@@ -28,7 +29,7 @@ public class HelloServiceImpl implements HelloService {
         return response;
     }
 
-    public void saveHello(HelloRequest body) {
+    public void saveHello(HelloRequest body) throws ApplicationException{
         throw new UnsupportedOperationException("No implementado");
     }
 }

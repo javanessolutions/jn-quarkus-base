@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.javanes.micro.quarkus.base.exception.ApplicationException;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
 
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
@@ -20,16 +21,16 @@ public interface HelloController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/hello")
-    public Response sayHello(@NotEmpty @HeaderParam String exchangeId);
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws ApplicationException;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/hello/{name}")
-    public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name);
+    public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name) throws ApplicationException;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/hello")
-    public Response saveHello(@NotEmpty String exchangeId, @RequestBody HelloRequest body);
+    public Response saveHello(@NotEmpty String exchangeId, @RequestBody HelloRequest body) throws ApplicationException;
 }

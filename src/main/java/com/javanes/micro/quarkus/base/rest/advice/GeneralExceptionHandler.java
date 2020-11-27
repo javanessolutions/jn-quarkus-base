@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Provider
-public class GeneralExceptionHandler implements ExceptionMapper<Exception> {
+public class GeneralExceptionHandler implements ExceptionMapper<RuntimeException> {
 
     final static Logger LOG = LoggerFactory.getLogger(GeneralExceptionHandler.class);
 
     @Override
-    public Response toResponse(Exception exception) {
+    public Response toResponse(RuntimeException exception) {
         LOG.warn("UNHANDLED_CASE", exception);
         ExceptionResponse response = new ExceptionResponse();
         response.setCode(0);
