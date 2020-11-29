@@ -47,14 +47,33 @@ $ oc project my-project
 ```
 Con los dos comandos anteriores estarás seguro de que has hecho login y te encuentras en el projecto donde quieras hacer tu despliegue ([Aqui esta la guía de oc](https://docs.openshift.com/container-platform/3.11/cli_reference/get_started_cli.html)).
 
-Finalmente para hacer el despliegue basta con el siguiente comando para que puedas ver tu contenedor dentro de OpenShift:
+#### Primer paso: Crear los recursos de tu aplicación
+
+Para los recursos de la aplicación se ha creado la carpeta `src/main/kubernetes`
+
+La configuración de tu archivo `src/main/resources/application.properties` la usamos para el desarrollo local en tu máquina. Para la inyección de configuraciones se ha creado el archivo `src/main/kubernetes/configmap.yml` que contiene la configuración de tu micro servicio en openshift. La configuración lo monta posteriormente en el pod en `deployments/config/application.properties`.
+
+Creación de tu ConfigMap
 ```
-./mvnw clean package -Dquarkus.kubernetes.deploy=true
+oc create -f src/main/kubernetes/configmap.yml
 ```
-Si deseas que se cree una ruta de manera automática para acceder al servicio entonces deberás usar el mismo comando agregando `-Dquarkus.openshift.expose=true`:
+
+Si quieres actualizar tu configuración en el configmap:
 ```
-./mvnw clean package -Dquarkus.kubernetes.deploy=true -Dquarkus.openshift.expose=true
+oc replace -f src/main/kubernetes/configmap.yml
 ```
+#### Segundo paso: Desplegar tu aplicación
+
+Para hacer el despliegue ejecuta este comando para que puedas ver tu contenedor dentro de OpenShift:
+```
+./mvnw clean package \
+-Dquarkus.container-image.build=true \
+-Dquarkus.kubernetes.deploy=true \
+-Dquarkus.openshift.expose=false \
+-DskipTests \
+-Dquarkus.openshift.labels.app.openshift.io/runtime=java
+``````
+__Si deseas que se cree una ruta de manera automática para acceder al servicio entonces deberás cambiar `-Dquarkus.openshift.expose=true`.__
 
 ### Empaquetar y correr la aplicación
 
@@ -67,32 +86,38 @@ java -jar target/jn-quarkus-base-1.0-SNAPSHOT-runner.jar
 ```
 
 
-### Creación de un ejecutable nativo
+### Creación de un ejecutable nativo (en tu maquina)
 
-Para crear un paquete nativo, es necesario tener instalado GraalVM, así como la variable de ambiente debe de apuntar al directorio de base, ejemplo:
+Para crear un paquete nativo en tu maquina (para tu sistema operativo), es necesario tener instalado GraalVM, así como la variable de ambiente debe de apuntar al directorio de base, ejemplo:
 ```
 export GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-20.3.0/Contents/Home
 ```
 
 Se usa el siguiente comando: `./mvnw package -Pnative` para crear el binario.
 
-Si no cuentas con GraalVM, se puede correr una contrucción nativa dentro de un contenedor, para lo cual debes de correr el siguiente comando:
+### Creación de un ejecutable nativo con un contenedor (para linux)
 
+Si no cuentas con GraalVM, pero si con Docker. Se puede correr una contrucción nativa dentro de un contenedor, para lo cual debes de correr el siguiente comando:
 ```
 ./mvnw package -Pnative -Dquarkus.native.container-build=true
 ```
 
-Puedes ejecutar tu aplicación nativa con: `./target/jn-quarkus-base-1.0-SNAPSHOT-runner`
+El ejecutable resultante es una aplicación nativa Linux y puedes ejecutar tu aplicación nativa con: `./target/jn-quarkus-base-1.0-SNAPSHOT-runner`
 
 Para mayor referencia: https://quarkus.io/guides/building-native-image.
 
-### Creación de un contenedor nativo
-
-Para la cración de un contenedor nativo es importante que la versión de la imagen base corresponda, en este caso estamos usando la versión `20.1.0-java11` de ubi-quarkus-native-s2i.
+### Creación de un contenedor nativo para OpenShift
 
 Para crear el contenedor deberás ejecutar el comando siguiente:
 ```
-oc new-app quay.io/quarkus/ubi-quarkus-native-s2i:20.1.0-java11~https://github.com/javanessolutions/jn-quarkus-base.git --name=jn-quarkus-base-native
+./mvnw clean package \
+-Pnative \
+-Dquarkus.native.container-build=true \
+-Dquarkus.container-image.build=true \
+-Dquarkus.kubernetes.deploy=true \
+-Dquarkus.openshift.expose=true \
+-DskipTests \
+-Dquarkus.openshift.labels.app.openshift.io/runtime=native
 ```
 Si por algun motivo ves *OOMKilled* en tu contenedor donde se hizo la costrucción de tu contenedor. Tendras que aumentar en el yaml el tamaño de la memoria asignada en el *BuildConfig*, con 4Gb deberá de ser suficiente siendo 8 el ideal.
 

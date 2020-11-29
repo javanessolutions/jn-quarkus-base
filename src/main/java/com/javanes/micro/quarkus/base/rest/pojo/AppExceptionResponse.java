@@ -16,9 +16,35 @@
  * limitations under the License.
  */
 
-package com.javanes.micro.quarkus.base.constants;
+package com.javanes.micro.quarkus.base.rest.pojo;
 
-public class AppConstants {
+public class AppExceptionResponse {
 
-    public static final String APP_CONFIG_PREFIX = "app-config";
+    private int code;
+    private String message;
+    private String exceptionMessage;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    public void setExceptionMessage(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
+    }
 }

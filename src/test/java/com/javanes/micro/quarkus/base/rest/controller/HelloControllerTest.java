@@ -21,7 +21,7 @@ public class HelloControllerTest {
     AppConfiguration appConfiguration;
 
     @Test
-    public void helloEndpointTest(){
+    public void helloEndpointTestV1(){
         given()
             .header(new Header("exchangeId", "1"))
             .when().get("/v1/hello-controller/hello")
@@ -31,7 +31,7 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void helloNameEndpointTest(){
+    public void helloNameEndpointTestV1(){
         String uuid = UUID.randomUUID().toString();
         given()
             .header(new Header("exchangeId", "1"))
@@ -41,4 +41,27 @@ public class HelloControllerTest {
                 .statusCode(200)
                 .body(is(String.format("{\"response\":\"%s %s %s\"}",appConfiguration.getGreeting(),uuid,appConfiguration.getSufix())));
     }
+
+    @Test
+    public void helloEndpointTestV2(){
+        given()
+            .header(new Header("exchangeId", "1"))
+            .when().get("/v2/hello-controller/hello")
+            .then()
+                .statusCode(200)
+                .body(is(String.format("{\"response\":\"Hello World V2\"}",appConfiguration.getGreeting(),appConfiguration.getDefaultName(),appConfiguration.getSufix())));
+    }
+
+    @Test
+    public void helloNameEndpointTestV2(){
+        String uuid = UUID.randomUUID().toString();
+        given()
+            .header(new Header("exchangeId", "1"))
+            .pathParam("name", uuid)
+            .when().get("/v2/hello-controller/hello/{name}")
+            .then()
+                .statusCode(200)
+                .body(is(String.format("{\"response\":\"Hello %s V2\"}",uuid,appConfiguration.getSufix())));
+    }
+
 }

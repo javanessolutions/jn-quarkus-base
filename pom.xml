@@ -1,68 +1,65 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.javanes.micro</groupId>
   <artifactId>jn-quarkus-base</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Javanes :: Micro :: Quarkus :: Base</name>
   <description>Arquetipo Base de LDAP</description>
-
   <organization>
     <name>Javanes Solutions S.A. de C.V.</name>
     <url>http://javanes.com</url>
   </organization>
-
   <licenses>
     <license>
       <name>GNU General Public License v3 (GPLv3)</name>
       <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
     </license>
   </licenses>
-
   <developers>
     <developer>
-      <email>dante.murillo@javanes.com</email>
-      <name>Dante Murillo</name>
-      <url>https://javanes.com</url>
       <id>dante-murillo</id>
+      <name>Dante Murillo</name>
+      <email>dante.murillo@javanes.com</email>
+      <url>https://javanes.com</url>
     </developer>
   </developers>
-
-  <issueManagement>
-    <url>https://github.com/javanessolutions/jn-quarkus-base/issues</url>
-    <system>GitHub</system>
-  </issueManagement>
-
   <scm>
-    <url>https://github.com/javanessolutions/bsi-ent-customer-manager</url>
-    <developerConnection>scm:git:https://github.com/javanessolutions/jn-quarkus-base.git</developerConnection>
     <connection>scm:git:https://github.com/javanessolutions/jn-quarkus-base.git</connection>
+    <developerConnection>scm:git:https://github.com/javanessolutions/jn-quarkus-base.git</developerConnection>
+    <url>https://github.com/javanessolutions/bsi-ent-customer-manager</url>
   </scm>
-
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/javanessolutions/jn-quarkus-base/issues</url>
+  </issueManagement>
   <properties>
-    <!-- Propiedades del proyecto -->
+    <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <encoding>UTF-8</encoding>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-    <!-- Propiedades de Java -->
+    <jacoco.version>0.8.4</jacoco.version>
+    <java.version>11</java.version>
+    <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
-    <maven.compiler.parameters>true</maven.compiler.parameters>
-    <java.version>11</java.version>
-
-    <!-- Compiladores -->
-    <compiler-plugin.version>3.8.1</compiler-plugin.version>
-    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
-
-    <!-- Propiedades de las librerias -->
-    <quarkus.platform.group-id>com.redhat.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>1.7.5.Final-redhat-00007</quarkus.platform.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus-plugin.version>1.7.5.Final-redhat-00007</quarkus-plugin.version>
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
+    <quarkus.platform.group-id>com.redhat.quarkus</quarkus.platform.group-id>
+    <quarkus.platform.version>1.7.5.Final-redhat-00007</quarkus.platform.version>
+    <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
   </properties>
-
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>${quarkus.platform.group-id}</groupId>
+        <artifactId>${quarkus.platform.artifact-id}</artifactId>
+        <version>${quarkus.platform.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -99,19 +96,6 @@
       <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
   </dependencies>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>${quarkus.platform.group-id}</groupId>
-        <artifactId>${quarkus.platform.artifact-id}</artifactId>
-        <version>${quarkus.platform.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <repositories>
     <repository>
       <releases>
@@ -136,7 +120,6 @@
       <url>https://maven.repository.redhat.com/ga</url>
     </pluginRepository>
   </pluginRepositories>
-
   <build>
     <plugins>
       <plugin>
@@ -167,9 +150,31 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${jacoco.version}</version>
+        <executions>
+          <execution>
+            <id>default-prepare-agent</id>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>default-report</id>
+            <goals>
+              <goal>report</goal>
+            </goals>
+            <configuration>
+              <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+              <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
-
   <profiles>
     <profile>
       <id>native</id>
@@ -206,5 +211,4 @@
       </properties>
     </profile>
   </profiles>
-
 </project>

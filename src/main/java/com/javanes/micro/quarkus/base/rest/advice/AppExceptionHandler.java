@@ -22,25 +22,24 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import com.javanes.micro.quarkus.base.enums.AppExceptionEnum;
-import com.javanes.micro.quarkus.base.rest.pojo.AppExceptionResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.javanes.micro.quarkus.base.exception.AppException;
+import com.javanes.micro.quarkus.base.rest.pojo.AppExceptionResponse;
+
 @Provider
-public class GeneralExceptionHandler implements ExceptionMapper<Throwable> {
+public class AppExceptionHandler implements ExceptionMapper<AppException> {
 
     final static Logger LOG = LoggerFactory.getLogger(GeneralExceptionHandler.class);
 
     @Override
-    public Response toResponse(Throwable exception) {
-        LOG.warn("UNHANDLED_CASE", exception);
+    public Response toResponse(AppException exception) {
+        LOG.warn("GENERAL_CASE", exception);
         AppExceptionResponse response = new AppExceptionResponse();
-        response.setCode(AppExceptionEnum.STATUS_UNKNOWN.getCode());
-        response.setMessage(AppExceptionEnum.STATUS_UNKNOWN.getMessage());
+        response.setCode(exception.getCode().getCode());
+        response.setMessage(exception.getCode().getMessage());
         response.setExceptionMessage(exception.getMessage());
-        return Response.status(AppExceptionEnum.STATUS_UNKNOWN.getHttpCode()).entity(response).build();
+        return Response.status(exception.getCode().getHttpCode()).entity(response).build();
     }
-
 }
