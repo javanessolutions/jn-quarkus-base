@@ -20,16 +20,17 @@ package com.javanes.micro.quarkus.base.rest.controller.impl;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import com.javanes.micro.quarkus.base.config.AppConfiguration;
-import com.javanes.micro.quarkus.base.enums.AppExceptionEnum;
 import com.javanes.micro.quarkus.base.exception.AppException;
 import com.javanes.micro.quarkus.base.rest.controller.HelloController;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloResponse;
 
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.slf4j.Logger;
@@ -76,7 +77,7 @@ public class HelloContollerImplV2 implements HelloController {
         return Response.ok().entity(response).build();
     }
 
-    public Response saveHello(@NotEmpty String exchangeId, HelloRequest body) {
+    public Response saveHello(@NotEmpty @HeaderParam String exchangeId, @NotNull @RequestBody HelloRequest body) {
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven

@@ -20,6 +20,7 @@ package com.javanes.micro.quarkus.base.rest.controller.impl;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
@@ -29,6 +30,10 @@ import com.javanes.micro.quarkus.base.rest.controller.HelloController;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
 import com.javanes.micro.quarkus.base.service.HelloService;
 
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import org.slf4j.Logger;
@@ -51,6 +56,10 @@ public class HelloContollerImplV1 implements HelloController {
     @Inject
     AppConfiguration AppConfiguration;
 
+    @Counted(
+        name = "greetings.counted",
+        description = "Número de saludos"
+    )
     public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws AppException {
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
@@ -77,7 +86,7 @@ public class HelloContollerImplV1 implements HelloController {
         return Response.ok().entity(helloService.sayHello(name)).build();
     }
 
-    public Response saveHello(@NotEmpty String exchangeId, HelloRequest body) throws AppException {
+    public Response saveHello(@NotEmpty @HeaderParam String exchangeId, @NotNull @RequestBody HelloRequest body) {
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
         // En los metodos del controller no se pone lógica, unicamente sirven

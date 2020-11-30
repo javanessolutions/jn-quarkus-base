@@ -18,6 +18,10 @@
 
 package com.javanes.micro.quarkus.base.rest.advice;
 
+import java.util.List;
+
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -33,10 +37,19 @@ public class GeneralExceptionHandler implements ExceptionMapper<Throwable> {
 
     final static Logger LOG = LoggerFactory.getLogger(GeneralExceptionHandler.class);
 
+    @Context
+    private HttpHeaders httpHeaders;
+
     @Override
     public Response toResponse(Throwable exception) {
-        LOG.warn("UNHANDLED_CASE", exception);
+        List<String> values = httpHeaders.getRequestHeader("exchangeId");
+        LOG.warn("UNHANDLED_CASE{}",values, exception);
         AppExceptionResponse response = new AppExceptionResponse();
+        if(values != null && !values.isEmpty()){
+            response.setExchangeId(values.get(0));
+        }else{
+            response.setExchangeId("");
+        }
         response.setCode(AppExceptionEnum.STATUS_UNKNOWN.getCode());
         response.setMessage(AppExceptionEnum.STATUS_UNKNOWN.getMessage());
         response.setExceptionMessage(exception.getMessage());

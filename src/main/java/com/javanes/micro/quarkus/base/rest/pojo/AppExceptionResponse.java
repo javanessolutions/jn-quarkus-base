@@ -18,12 +18,27 @@
 
 package com.javanes.micro.quarkus.base.rest.pojo;
 
+import java.util.Date;
+
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+@Schema(name = "AppExceptionResponse", description = "POJO de errores de la aplicación.")
 public class AppExceptionResponse {
 
+    @Schema(description = "Identificador de la llamada al servidor.",  example = "asdf-asdf-asdf-asdf" )
+    private String exchangeId;
+    @Schema(description = "Código de error.", example = "1" )
     private int code;
+    @Schema(description = "Mensaje de error.", example = "Error generico de la aplicación." )
     private String message;
+    @Schema(description = "Error técnico.", example = "Error en la base de datos." )
     private String exceptionMessage;
+    @Schema(description = "Momento en el que ocurrio el error.", example = "2020-11-29T12:27:27.286Z[UTC]")
+    private Date timestamp;
 
+    public AppExceptionResponse(){
+        timestamp = new Date();
+    }
     public int getCode() {
         return code;
     }
@@ -46,5 +61,21 @@ public class AppExceptionResponse {
 
     public void setExceptionMessage(String exceptionMessage) {
         this.exceptionMessage = exceptionMessage;
+    }
+
+    public String getExchangeId() {
+        return exchangeId;
+    }
+
+    public void setExchangeId(String exchangeId) {
+        this.exchangeId = exchangeId;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

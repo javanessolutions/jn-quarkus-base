@@ -177,7 +177,7 @@ com.javanes.micro.customer.manager
 
 ## Manejo de excepciones
 
-Para el arquetipo fue creada una clase general en 'com.javanes.micro.quarkus.base.exception' llamada `ApplicationException` la cual como podrás ver en el en esta clase base se maneja como estandar en todas las interfaces de las 3 capas:
+Para el arquetipo fue creada una clase general en 'com.javanes.micro.quarkus.base.exception' llamada `AppException` la cual como podrás ver en el en esta clase base se maneja como estandar en todas las interfaces de las 3 capas:
 
 * Controller
 * Service
@@ -187,7 +187,7 @@ La razón es que esta clase permite tener un control de errores adecuado para la
 
 Para lo anterior se han creado dos advisors en el paquete `com.javanes.micro.quarkus.base.rest.advice`
 
-* `ApplicationExceptionHandler` para el manejo de errores aplicativos.
+* `AppExceptionHandler` para el manejo de errores aplicativos.
 * `GeneralExceptionHancler` para cualquier error desconocido de la aplicación.
 
 ## Configuración de la aplicación
@@ -221,8 +221,8 @@ public interface HelloController {
 2. Crear la implementación del servicio rest en el paquete `com.javanes.micro.quarkus.base.rest.controller.impl`, hay que notar que en la implementación se identifica el base path del servicio. La ventaja de esto es que la implementación de los controladores la puedes versionar en el path `v1`, `v2`, etc.
 
 ```
-@Path("/v2/hello-controller")
-public class HelloContollerImplV2 implements HelloController {
+@Path("/v1/hello-controller")
+public class HelloContollerImplV1 implements HelloController {
 
     public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws ApplicationException{
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
@@ -239,7 +239,7 @@ La creación de servicios que pueden ser inyectados para proveer lógica aplicat
 
 1. Crear la interfaz del servicio en el paquete `com.javanes.micro.quarkus.base.service`, esta interfaz solamente tendrá la definición del servicio y puede ser muy similar a la interfaz controller.
 2. Crear la implementación del servicio en el paquete `com.javanes.micro.quarkus.base.service.impl`.
-3. Anotar la clase con `@ApplicationScoped` para que pueda ser inyectada en cualquier componente.
+3. Anotar la clase de implementación con `@ApplicationScoped` para que pueda ser inyectada en cualquier componente.
 
 ## Como crear un nuevo servicio de persistencia
 
@@ -247,4 +247,4 @@ La creación de servicios que pueden ser inyectados para proveer lógica aplicat
 
 1. Crear la interfaz del servicio en el paquete `com.javanes.micro.quarkus.base.persistence`, esta interfaz solamente tendrá la definición del servicio y puede ser muy similar a la interfaz controller.
 2. Crear la implementación del servicio en el paquete `com.javanes.micro.quarkus.base.persistence.impl`.
-3. Anotar la clase con `@ApplicationScoped` para que pueda ser inyectada en cualquier componente.
+3. Anotar la clase de implementación con `@ApplicationScoped` para que pueda ser inyectada en cualquier componente.

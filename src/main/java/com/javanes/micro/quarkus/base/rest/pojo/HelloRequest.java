@@ -18,8 +18,12 @@
 
 package com.javanes.micro.quarkus.base.rest.pojo;
 
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+@Schema(name = "HelloRequest", description = "POJO de solicitud del servicio.")
 public class HelloRequest {
 
+    @Schema( example = "Alejandro" )
     private String name;
 
     public String getName() {
