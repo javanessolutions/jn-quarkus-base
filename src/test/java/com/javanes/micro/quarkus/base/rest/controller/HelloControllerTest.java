@@ -17,9 +17,6 @@ import com.javanes.micro.quarkus.base.config.AppConfiguration;
 @QuarkusTest
 public class HelloControllerTest {
     
-    @Inject
-    AppConfiguration appConfiguration;
-
     @Test
     public void helloEndpointTestV1(){
         given()
@@ -27,7 +24,7 @@ public class HelloControllerTest {
             .when().get("/v1/hello-controller/hello")
             .then()
                 .statusCode(200)
-                .body(is(String.format("{\"response\":\"%s %s %s\"}",appConfiguration.getGreeting(),appConfiguration.getDefaultName(),appConfiguration.getSufix())));
+                .body(is("{\"response\":\"Hello world !!\"}"));
     }
 
     @Test
@@ -39,7 +36,7 @@ public class HelloControllerTest {
             .when().get("/v1/hello-controller/hello/{name}")
             .then()
                 .statusCode(200)
-                .body(is(String.format("{\"response\":\"%s %s %s\"}",appConfiguration.getGreeting(),uuid,appConfiguration.getSufix())));
+                .body(is(String.format("{\"response\":\"Hello %s !!\"}",uuid)));
     }
 
     @Test
@@ -49,7 +46,7 @@ public class HelloControllerTest {
             .when().get("/v2/hello-controller/hello")
             .then()
                 .statusCode(200)
-                .body(is(String.format("{\"response\":\"Hello World V2\"}",appConfiguration.getGreeting(),appConfiguration.getDefaultName(),appConfiguration.getSufix())));
+                .body(is("{\"response\":\"Hola Pluton !!\"}"));
     }
 
     @Test
@@ -61,7 +58,7 @@ public class HelloControllerTest {
             .when().get("/v2/hello-controller/hello/{name}")
             .then()
                 .statusCode(200)
-                .body(is(String.format("{\"response\":\"Hello %s V2\"}",uuid,appConfiguration.getSufix())));
+                .body(is(String.format("{\"response\":\"Hola %s !!\"}",uuid)));
     }
 
 }
