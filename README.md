@@ -73,7 +73,7 @@ Para hacer el despliegue ejecuta este comando para que puedas ver tu contenedor 
 -DskipTests \
 -Dquarkus.openshift.labels.app.openshift.io/runtime=java
 ``````
-__Si deseas que se cree una ruta de manera automática para acceder al servicio entonces deberás cambiar `-Dquarkus.openshift.expose=true`.__
+Si deseas que se cree una ruta de manera automática para acceder al servicio entonces deberás cambiar `-Dquarkus.openshift.expose=true`.
 
 ### Empaquetar y correr la aplicación
 

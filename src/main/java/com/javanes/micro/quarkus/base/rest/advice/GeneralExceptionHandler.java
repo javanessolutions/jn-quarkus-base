@@ -18,6 +18,8 @@
 
 package com.javanes.micro.quarkus.base.rest.advice;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import javax.ws.rs.core.Context;
@@ -43,17 +45,29 @@ public class GeneralExceptionHandler implements ExceptionMapper<Throwable> {
     @Override
     public Response toResponse(Throwable exception) {
         List<String> values = httpHeaders.getRequestHeader("exchangeId");
-        LOG.warn("UNHANDLED_CASE{}",values, exception);
+        if(LOG.isWarnEnabled()){
+            LOG.warn("CASO_NO_MANEJADO{}",values, exception);
+        }            
         AppExceptionResponse response = new AppExceptionResponse();
+
         if(values != null && !values.isEmpty()){
             response.setExchangeId(values.get(0));
-        }else{
-            response.setExchangeId("");
         }
-        response.setCode(AppExceptionEnum.STATUS_UNKNOWN.getCode());
-        response.setMessage(AppExceptionEnum.STATUS_UNKNOWN.getMessage());
-        response.setExceptionMessage(exception.getMessage());
-        return Response.status(AppExceptionEnum.STATUS_UNKNOWN.getHttpCode()).entity(response).build();
+
+        if(LOG.isDebugEnabled()){
+            response.setExceptionDetail(getStackTrace(exception));
+        }
+
+        response.setCode(AppExceptionEnum.STATUS_DESCONOCIDO.getAppCode());
+        response.setMessage(exception.getMessage());
+        return Response.status(AppExceptionEnum.STATUS_DESCONOCIDO.getHttpCode()).entity(response).build();
+    }
+
+    private String getStackTrace(Throwable t){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        return sw.toString();
     }
 
 }

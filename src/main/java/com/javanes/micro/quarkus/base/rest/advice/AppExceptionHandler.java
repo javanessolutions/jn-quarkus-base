@@ -18,6 +18,8 @@
 
 package com.javanes.micro.quarkus.base.rest.advice;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 import javax.ws.rs.core.Context;
@@ -35,7 +37,7 @@ import com.javanes.micro.quarkus.base.rest.pojo.AppExceptionResponse;
 @Provider
 public class AppExceptionHandler implements ExceptionMapper<AppException> {
 
-    final static Logger LOG = LoggerFactory.getLogger(GeneralExceptionHandler.class);
+    final static Logger LOG = LoggerFactory.getLogger(AppExceptionHandler.class);
 
     @Context
     private HttpHeaders httpHeaders;
@@ -43,16 +45,31 @@ public class AppExceptionHandler implements ExceptionMapper<AppException> {
     @Override
     public Response toResponse(AppException exception) {
         List<String> values = httpHeaders.getRequestHeader("exchangeId");
-        LOG.warn("GENERAL_CASE{}",values, exception);
+        if(LOG.isInfoEnabled()){
+            LOG.info("ERROR_APLICATIVO{}: {}",values, exception.getMessage());
+        }
+
         AppExceptionResponse response = new AppExceptionResponse();
         if(values != null && !values.isEmpty()){
             response.setExchangeId(values.get(0));
-        }else{
-            response.setExchangeId("");
         }
-        response.setCode(exception.getCode().getCode());
-        response.setMessage(exception.getCode().getMessage());
-        response.setExceptionMessage(exception.getMessage());
-        return Response.status(exception.getCode().getHttpCode()).entity(response).build();
+
+        response.setCode(exception.getAppCode());
+        response.setMessage(exception.getMessage());
+
+        if(LOG.isDebugEnabled()){
+            LOG.debug("DETALLE_ERROR_APLICATIVO{}", values, exception);
+            response.setExceptionDetail(getStackTrace(exception));
+        }
+
+        return Response.status(exception.getHttpStatus()).entity(response).build();
     }
+
+    private String getStackTrace(Throwable t){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        t.printStackTrace(pw);
+        return sw.toString();
+    }
+
 }

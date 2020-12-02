@@ -28,11 +28,9 @@ import com.javanes.micro.quarkus.base.config.AppConfiguration;
 import com.javanes.micro.quarkus.base.exception.AppException;
 import com.javanes.micro.quarkus.base.rest.controller.HelloController;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
+import com.javanes.micro.quarkus.base.rest.pojo.HelloResponse;
 import com.javanes.micro.quarkus.base.service.HelloService;
 
-import org.eclipse.microprofile.metrics.MetricUnits;
-import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Gauge;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
@@ -47,19 +45,7 @@ public class HelloContollerImplV1 implements HelloController {
      */
     private static final Logger LOG = LoggerFactory.getLogger(HelloContollerImplV1.class);
 
-    /**
-     * Servicio de negocio
-     */
-    @Inject
-    HelloService helloService;
 
-    @Inject
-    AppConfiguration AppConfiguration;
-
-    @Counted(
-        name = "greetings.counted",
-        description = "Número de saludos"
-    )
     public Response sayHello(@NotEmpty @HeaderParam String exchangeId) throws AppException {
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
         //
@@ -70,7 +56,9 @@ public class HelloContollerImplV1 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        return Response.ok().entity(helloService.sayHello(AppConfiguration.getDefaultName())).build();
+        HelloResponse helloResponse = new HelloResponse();
+        helloResponse.setResponse("Hello world !!");
+        return Response.ok().entity(helloResponse).build();
     }
 
     public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name) throws AppException {
@@ -83,7 +71,9 @@ public class HelloContollerImplV1 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        return Response.ok().entity(helloService.sayHello(name)).build();
+        HelloResponse helloResponse = new HelloResponse();
+        helloResponse.setResponse(String.format("Hello %s !!", name));
+        return Response.ok().entity(helloResponse).build();
     }
 
     public Response saveHello(@NotEmpty @HeaderParam String exchangeId, @NotNull @RequestBody HelloRequest body) {
@@ -96,8 +86,9 @@ public class HelloContollerImplV1 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        helloService.saveHello(body);
-        return Response.accepted().build();
+        HelloResponse helloResponse = new HelloResponse();
+        helloResponse.setResponse(String.format("Hello %s !!", body.getName()));
+        return Response.ok().entity(helloResponse).build();
     }
 
 }

@@ -25,10 +25,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import com.javanes.micro.quarkus.base.config.AppConfiguration;
-import com.javanes.micro.quarkus.base.exception.AppException;
 import com.javanes.micro.quarkus.base.rest.controller.HelloController;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
-import com.javanes.micro.quarkus.base.rest.pojo.HelloResponse;
+import com.javanes.micro.quarkus.base.service.HelloService;
 
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
@@ -45,7 +44,10 @@ public class HelloContollerImplV2 implements HelloController {
     private static final Logger LOG = LoggerFactory.getLogger(HelloContollerImplV2.class);
 
     @Inject
-    AppConfiguration AppConfiguration;
+    AppConfiguration appConfiguration;
+
+    @Inject
+    HelloService helloService;
 
     public Response sayHello(@NotEmpty @HeaderParam String exchangeId) {
         LOG.debug(String.format("EXCHANGE_ID: %s", exchangeId));
@@ -57,9 +59,7 @@ public class HelloContollerImplV2 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        HelloResponse response = new HelloResponse();
-        response.setResponse("Hello World V2");
-        return Response.ok().entity(response).build();
+        return Response.ok().entity(helloService.sayHello(appConfiguration.getDefaultName())).build();
     }
 
     public Response sayHello(@NotEmpty @HeaderParam String exchangeId, @PathParam String name) {
@@ -72,9 +72,7 @@ public class HelloContollerImplV2 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        HelloResponse response = new HelloResponse();
-        response.setResponse(String.format("Hello %s V2", name));
-        return Response.ok().entity(response).build();
+        return Response.ok().entity(helloService.sayHello(name)).build();
     }
 
     public Response saveHello(@NotEmpty @HeaderParam String exchangeId, @NotNull @RequestBody HelloRequest body) {
@@ -87,7 +85,7 @@ public class HelloContollerImplV2 implements HelloController {
         // Para ello la clase "Response" brinda facilidades.
         // - Cualquier excepción no controlada es manejada por:
         // @See GeneralExceptionHandler
-        throw new AppException("No se puede salvar !");
+        return Response.ok().entity(helloService.saveHello(body.getName())).build();
     }
 
 }

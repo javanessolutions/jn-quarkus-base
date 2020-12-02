@@ -27,12 +27,12 @@ public class AppExceptionResponse {
 
     @Schema(description = "Identificador de la llamada al servidor.",  example = "asdf-asdf-asdf-asdf" )
     private String exchangeId;
-    @Schema(description = "Código de error.", example = "1" )
+    @Schema(description = "Código de error de la aplicación.", example = "1" )
     private int code;
     @Schema(description = "Mensaje de error.", example = "Error generico de la aplicación." )
     private String message;
-    @Schema(description = "Error técnico.", example = "Error en la base de datos." )
-    private String exceptionMessage;
+    @Schema(description = "Detalle técnico.", example = "Impresión del stack de la excepción." )
+    private String exceptionDetail;
     @Schema(description = "Momento en el que ocurrio el error.", example = "2020-11-29T12:27:27.286Z[UTC]")
     private Date timestamp;
 
@@ -55,12 +55,12 @@ public class AppExceptionResponse {
         this.message = message;
     }
 
-    public String getExceptionMessage() {
-        return exceptionMessage;
+    public String getExceptionDetail() {
+        return exceptionDetail;
     }
 
-    public void setExceptionMessage(String exceptionMessage) {
-        this.exceptionMessage = exceptionMessage;
+    public void setExceptionDetail(String exceptionMessage) {
+        this.exceptionDetail = exceptionMessage;
     }
 
     public String getExchangeId() {

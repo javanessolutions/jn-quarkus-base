@@ -22,7 +22,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.javanes.micro.quarkus.base.config.AppConfiguration;
-import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
+import com.javanes.micro.quarkus.base.enums.AppExceptionEnum;
+import com.javanes.micro.quarkus.base.exception.AppException;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloResponse;
 import com.javanes.micro.quarkus.base.service.HelloService;
 
@@ -45,7 +46,9 @@ public class HelloServiceImpl implements HelloService {
         return response;
     }
 
-    public void saveHello(HelloRequest body) {
-        throw new UnsupportedOperationException("No implementado");
+
+    @Override
+    public HelloResponse saveHello(String name) {
+        throw new AppException(AppExceptionEnum.STATUS_NO_IMPLEMENTADO, "Funcionalidad pendiente.");
     }
 }

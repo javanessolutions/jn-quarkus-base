@@ -18,11 +18,14 @@
 
 package com.javanes.micro.quarkus.base.exception;
 
+import javax.ws.rs.core.Response;
+
 import com.javanes.micro.quarkus.base.enums.AppExceptionEnum;
 
 public class AppException extends RuntimeException {
 
-    private AppExceptionEnum code;
+    private Response.Status httpStatus;
+    private int appCode;
 
     /**
      *
@@ -31,41 +34,52 @@ public class AppException extends RuntimeException {
 
     public AppException() {
         super();
-        code = AppExceptionEnum.STATUS_GENERIC_ERROR;
+        httpStatus = AppExceptionEnum.STATUS_ERROR_GENERICO.getHttpCode();
+        appCode = AppExceptionEnum.STATUS_ERROR_GENERICO.getAppCode();
     }
 
     public AppException(String message) {
         super(message);
-        code = AppExceptionEnum.STATUS_GENERIC_ERROR;
+        httpStatus = AppExceptionEnum.STATUS_ERROR_GENERICO.getHttpCode();
+        appCode = AppExceptionEnum.STATUS_ERROR_GENERICO.getAppCode();
     }
 
     public AppException(Throwable cause) {
         super(cause);
-        code = AppExceptionEnum.STATUS_GENERIC_ERROR;
+        httpStatus = AppExceptionEnum.STATUS_ERROR_GENERICO.getHttpCode();
+        appCode = AppExceptionEnum.STATUS_ERROR_GENERICO.getAppCode();
     }
 
     public AppException(String message, Throwable cause) {
         super(message, cause);
-        code = AppExceptionEnum.STATUS_GENERIC_ERROR;
+        httpStatus = AppExceptionEnum.STATUS_ERROR_GENERICO.getHttpCode();
+        appCode = AppExceptionEnum.STATUS_ERROR_GENERICO.getAppCode();
     }
 
     public AppException(AppExceptionEnum code, String message) {
         super(message);
-        this.code = code;
+        httpStatus = code.getHttpCode();
+        appCode = code.getAppCode();
     }
 
     public AppException(AppExceptionEnum code, Throwable cause) {
         super(cause);
-        this.code = code;
+        httpStatus = code.getHttpCode();
+        appCode = code.getAppCode();
     }
 
     public AppException(AppExceptionEnum code, String message, Throwable cause) {
         super(message, cause);
-        this.code = code;
+        httpStatus = code.getHttpCode();
+        appCode = code.getAppCode();
     }
 
-    public AppExceptionEnum getCode() {
-        return code;
+    public Response.Status getHttpStatus() {
+        return httpStatus;
+    }
+
+    public int getAppCode() {
+        return appCode;
     }
 
 }

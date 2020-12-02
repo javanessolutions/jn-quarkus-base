@@ -21,28 +21,23 @@ package com.javanes.micro.quarkus.base.enums;
 import javax.ws.rs.core.Response;
 
 public enum AppExceptionEnum {
-    STATUS_UNKNOWN(Response.Status.INTERNAL_SERVER_ERROR, 0, "Caso de uso no contemplado en la aplicación."),
-    STATUS_GENERIC_ERROR(Response.Status.BAD_REQUEST, 1, "Error generico de la aplicación.");
+    STATUS_DESCONOCIDO(Response.Status.INTERNAL_SERVER_ERROR, -1),
+    STATUS_NO_IMPLEMENTADO(Response.Status.NOT_IMPLEMENTED,-1),
+    STATUS_ERROR_GENERICO(Response.Status.BAD_REQUEST, 1);
 
     private final Response.Status httpCode;
-    private final int code;
-    private final String message;
+    private final int appCode;
 
-    AppExceptionEnum(Response.Status httpCode, int code, String message) {
+    AppExceptionEnum(Response.Status httpCode, int appCode) {
         this.httpCode = httpCode;
-        this.code = code;
-        this.message = message;
+        this.appCode = appCode;
     }
 
     public Response.Status getHttpCode() {
         return httpCode;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
+    public int getAppCode() {
+        return appCode;
     }
 }
