@@ -1,3 +1,6 @@
+##
+# Este es el ConfigMap
+#
 apiVersion: v1
 kind: ConfigMap
 metadata:
