@@ -1,1 +1,2 @@
-MAVEN_ARGS=clean package -Dquarkus.openshift.service-account=default -Dquarkus.container-image.build=true -Dquarkus.kubernetes.deploy=true -Dquarkus.openshift.expose=false -DskipTests -Dquarkus.openshift.labels.app.openshift.io/runtime=java
+MAVEN_S2I_ARTIFACT_DIRS=target
+S2I_SOURCE_DEPLOYMENTS_FILTER=*-runner.jar lib
