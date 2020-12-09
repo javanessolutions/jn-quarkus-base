@@ -10,10 +10,6 @@ import static org.hamcrest.CoreMatchers.is;
 
 import java.util.UUID;
 
-import javax.inject.Inject;
-
-import com.javanes.micro.quarkus.base.config.AppConfiguration;
-
 @QuarkusTest
 public class HelloControllerTest {
     
