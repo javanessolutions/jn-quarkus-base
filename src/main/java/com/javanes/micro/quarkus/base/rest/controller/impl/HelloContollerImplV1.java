@@ -18,18 +18,15 @@
 
 package com.javanes.micro.quarkus.base.rest.controller.impl;
 
-import javax.inject.Inject;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
-import com.javanes.micro.quarkus.base.config.AppConfiguration;
 import com.javanes.micro.quarkus.base.exception.AppException;
 import com.javanes.micro.quarkus.base.rest.controller.HelloController;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloRequest;
 import com.javanes.micro.quarkus.base.rest.pojo.HelloResponse;
-import com.javanes.micro.quarkus.base.service.HelloService;
 
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.jboss.resteasy.annotations.jaxrs.HeaderParam;
