@@ -5,7 +5,7 @@
   <artifactId>jn-quarkus-base</artifactId>
   <version>1.1-SNAPSHOT</version>
   <name>Javanes :: Micro :: Quarkus :: Base</name>
-  <description>Arquetipo Base de LDAP</description>
+  <description>Arquetipo Base de Quarkus</description>
   <organization>
     <name>Javanes Solutions S.A. de C.V.</name>
     <url>http://javanes.com</url>
@@ -24,10 +24,26 @@
       <url>https://javanes.com</url>
     </developer>
   </developers>
+  <contributors>
+    <contributor>
+      <name>delcital</name>
+      <email>miguel.lopez@javanes.com</email>
+      <url>https://javanes.com</url>
+      <organization>Javanes</organization>
+      <organizationUrl>https://javanes.com</organizationUrl>
+    </contributor>
+    <contributor>
+      <name>vicente-perez</name>
+      <email>vicente.perez@javanes.com</email>
+      <url>https://javanes.com</url>
+      <organization>Javanes</organization>
+      <organizationUrl>https://javanes.com</organizationUrl>
+    </contributor>
+  </contributors>
   <scm>
     <connection>scm:git:https://github.com/javanessolutions/jn-quarkus-base.git</connection>
     <developerConnection>scm:git:https://github.com/javanessolutions/jn-quarkus-base.git</developerConnection>
-    <url>https://github.com/javanessolutions/bsi-ent-customer-manager</url>
+    <url>https://github.com/javanessolutions/jn-quarkus-base</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
@@ -172,6 +188,13 @@
               <goal>report</goal>
             </goals>
             <configuration>
+              <excludes>
+                <exclude>**/advice/**</exclude>
+                <exclude>**/pojo/**</exclude>
+                <exclude>**/exception/**</exclude>
+                <exclude>**/constants/**</exclude>
+                <exclude>**/enums/**</exclude>
+              </excludes>
               <dataFile>${project.build.directory}/jacoco.exec</dataFile>
               <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
             </configuration>

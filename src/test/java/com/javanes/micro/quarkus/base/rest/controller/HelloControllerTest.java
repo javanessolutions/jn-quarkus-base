@@ -7,6 +7,7 @@ import io.restassured.http.Header;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.UUID;
 
@@ -15,46 +16,63 @@ public class HelloControllerTest {
     
     @Test
     public void helloEndpointTestV1(){
+        UUID uuid = UUID.randomUUID();
         given()
-            .header(new Header("exchangeId", "1"))
-            .when().get("/v1/hello-controller/hello")
+            .when()
+                .header("exchangeId", uuid)
+                .get("/v1/hello-controller/hello")
             .then()
                 .statusCode(200)
                 .body(is("{\"response\":\"Hello world !!\"}"));
-    }
 
-    @Test
-    public void helloNameEndpointTestV1(){
-        String uuid = UUID.randomUUID().toString();
         given()
-            .header(new Header("exchangeId", "1"))
-            .pathParam("name", uuid)
-            .when().get("/v1/hello-controller/hello/{name}")
+            .when()
+                .header("exchangeId", uuid)
+                .get("/v1/hello-controller/hello/Alejandro")
             .then()
                 .statusCode(200)
-                .body(is(String.format("{\"response\":\"Hello %s !!\"}",uuid)));
+                .body(is("{\"response\":\"Hello Alejandro !!\"}"));
+        
+        given()
+            .when()
+                .header("exchangeId", uuid)
+                .header(new Header("Content-Type", "application/json"))
+                .body("{\"name\":\"Alejandro\"}")
+                .post("/v1/hello-controller/hello")
+            .then()
+                .statusCode(200)
+                .body(is("{\"response\":\"Hello Alejandro !!\"}"));        
     }
 
     @Test
     public void helloEndpointTestV2(){
+        UUID uuid = UUID.randomUUID();
         given()
-            .header(new Header("exchangeId", "1"))
-            .when().get("/v2/hello-controller/hello")
+            .when()
+                .header("exchangeId", uuid)
+                .get("/v2/hello-controller/hello")
             .then()
                 .statusCode(200)
                 .body(is("{\"response\":\"Hola Pluton !!\"}"));
-    }
 
-    @Test
-    public void helloNameEndpointTestV2(){
-        String uuid = UUID.randomUUID().toString();
         given()
-            .header(new Header("exchangeId", "1"))
-            .pathParam("name", uuid)
-            .when().get("/v2/hello-controller/hello/{name}")
+            .when()
+                .header("exchangeId", uuid)
+                .get("/v2/hello-controller/hello/Alejandro")
             .then()
                 .statusCode(200)
-                .body(is(String.format("{\"response\":\"Hola %s !!\"}",uuid)));
+                .body(is("{\"response\":\"Hola Alejandro !!\"}"));
+        
+        given()
+            .when()
+                .header("exchangeId", uuid)
+                .header(new Header("Content-Type", "application/json"))
+                .body("{\"name\":\"Alejandro\"}")
+                .post("/v2/hello-controller/hello")
+            .then()
+                .statusCode(501)
+                .body(notNullValue());        
     }
+
 
 }
