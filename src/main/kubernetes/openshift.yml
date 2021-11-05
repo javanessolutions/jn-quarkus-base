@@ -28,6 +28,18 @@ metadata:
   name: cm-jn-quarkus-base
 data:
   application.properties: |-
+    ## El nivel de la bitacora.
+    #
+    # JBoss Logging soporta los estilos de bitacora de Apache:
+    #
+    # * {@link org.jboss.logmanager.Level#FATAL}
+    # * {@link org.jboss.logmanager.Level#ERROR}
+    # * {@link org.jboss.logmanager.Level#WARN}
+    # * {@link org.jboss.logmanager.Level#INFO}
+    # * {@link org.jboss.logmanager.Level#DEBUG}
+    # * {@link org.jboss.logmanager.Level#TRACE}
+    #
+    quarkus.log.level=INFO
     # ===================================================================
     # PROPIEDADES PERSONALIZADAS DE LA APLICACION
     #
