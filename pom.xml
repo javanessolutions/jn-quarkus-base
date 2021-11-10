@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.javanes.micro</groupId>
   <artifactId>jn-quarkus-base</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>Javanes :: Micro :: Quarkus :: Base</name>
   <description>Arquetipo Base de Quarkus</description>
   <organization>
@@ -23,32 +24,21 @@
       <email>dante.murillo@javanes.com</email>
       <url>https://javanes.com</url>
     </developer>
+    <developer>
+      <id>marcosls621</id>
+      <name>Marcos Lopez</name>
+      <email>marcos.lopez@javanes.com</email>
+      <url>https://javanes.com</url>
+    </developer>
   </developers>
-  <contributors>
-    <contributor>
-      <name>delcital</name>
-      <email>miguel.lopez@javanes.com</email>
-      <url>https://javanes.com</url>
-      <organization>Javanes</organization>
-      <organizationUrl>https://javanes.com</organizationUrl>
-    </contributor>
-    <contributor>
-      <name>vicente-perez</name>
-      <email>vicente.perez@javanes.com</email>
-      <url>https://javanes.com</url>
-      <organization>Javanes</organization>
-      <organizationUrl>https://javanes.com</organizationUrl>
-    </contributor>
-  </contributors>
   <scm>
-    <connection>scm:git:https://github.com/javanessolutions/jn-quarkus-base.git</connection>
-    <developerConnection>scm:git:https://github.com/javanessolutions/jn-quarkus-base.git</developerConnection>
-    <url>https://github.com/javanessolutions/jn-quarkus-base</url>
-    <tag>HEAD</tag>
+    <connection>scm:git:https://github.com/javanessolutions/bsi-sso-hsm-connector.git</connection>
+    <developerConnection>scm:git:https://github.com/javanessolutions/bsi-sso-hsm-connector.git</developerConnection>
+    <url>https://github.com/javanessolutions/bsi-sso-hsm-connector</url>
   </scm>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/javanessolutions/jn-quarkus-base/issues</url>
+    <url>https://github.com/javanessolutions/bsi-sso-hsm-connector/issues</url>
   </issueManagement>
   <properties>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
@@ -60,10 +50,17 @@
     <maven.compiler.target>11</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <quarkus-plugin.version>1.7.5.Final-redhat-00007</quarkus-plugin.version>
+    <quarkus-plugin.version>1.7.5.Final-redhat-00011</quarkus-plugin.version>
     <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>com.redhat.quarkus</quarkus.platform.group-id>
-    <quarkus.platform.version>1.7.5.Final-redhat-00007</quarkus.platform.version>
+    <quarkus.platform.version>1.7.5.Final-redhat-00011</quarkus.platform.version>
+    <sonar.exclusions>**/config/**,
+      **/advice/**,
+      **/pojo/**,
+      **/exception/**,
+      **/constants/**,
+      **/enums/**,
+      **/util/**</sonar.exclusions>
     <surefire-plugin.version>3.0.0-M5</surefire-plugin.version>
   </properties>
   <dependencyManagement>
@@ -85,6 +82,11 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-junit5-mockito</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -115,6 +117,18 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-metrics</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-kubernetes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-container-image-s2i</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-config-yaml</artifactId>
     </dependency>
   </dependencies>
   <repositories>
